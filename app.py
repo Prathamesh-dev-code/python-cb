@@ -243,8 +243,8 @@ def submit_contact_form():
             "success": False,
             "message": "There was an error saving your information. Please try again."
         })
-if __name__ == '__main__':
-   app.run(debug=True)
-
+        
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
 
 
