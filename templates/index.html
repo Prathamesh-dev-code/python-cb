@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>LightHouse Chatbot</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div id="chatbot" class="chat-container" style="display: none;">
+        <div class="chat-header">
+            <div class="header-title">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Lighthouse Logo" style="width: 16%;">
+                <h4>Lighthouse Connect <br><span>Your virtual assistant.</span></h4>
+            </div>
+            <button class="close-btn" onclick="toggleChatbot()" title= "Minimize"><i class="fa fa-minus" aria-hidden="true"></i></button>
+        </div>
+        <div class="chat-body" id="homeTab">
+            <img src="{{ url_for('static', filename='cb.jpg') }}" alt="Chatbot Image">
+            <div class="welcome-area">
+                <h1>Welcome to LightHouse</h1>
+                <p>Your virtual assistant.</p>
+                <button id="startConversationBtn" onclick="openTab(event, 'conversationTab')">
+                    <i class="fa fa-commenting" aria-hidden="true"></i> Start Conversation
+                </button>
+            </div>
+        </div>
+        <div class="chat-body" id="conversationTab" style="display:none;">
+            <div id="chatBody">
+            </div>
+            <div class="chat-message bot-message options" id="fixedOptions">
+            </div>
+            <div class="chat-footer">
+                <input type="text" id="userInput" placeholder="Ask LightHouse..." onkeydown="checkEnterKey(event)">
+                <button id="sendBtn" onclick="sendMessage()">
+                    <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chat-body" id="contactFormTab" style="display:none;">
+            <form id="contactForm">
+                <label for="name">Name: <span class="required">*</span></label>
+                <input type="text" id="name" name="name" placeholder="Your Name.." required>
+
+                <label for="mobile">Mobile: <span class="required">*</span></label>
+                <input type="tel" id="mobile" name="mobile" placeholder="Your Mobile Number.." pattern="[0-9]{10}"
+                    title="Please enter a 10-digit mobile number" required>
+
+                <label for="email">Email: <span class="required">*</span></label>
+                <input type="email" id="email" name="email" placeholder="Your Email.."
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Please enter a valid email address"
+                    required>
+
+                <label for="company">Company: <span class="required">*</span></label>
+                <input type="text" id="company" name="company" placeholder="Your Company Name.." required>
+
+                <label for="city">City: <span class="required">*</span></label>
+                <input type="text" id="city" name="city" placeholder="Your City.." required>
+
+                <label for="message">Message: <span class="required">*</span></label>
+                <textarea id="message" name="message"
+                    placeholder="What specific needs or services are you interested in.." required></textarea>
+
+                <button type="button" id="submitContactFormBtn">Submit</button>
+            </form>
+        </div>
+        <div class="footer_bar">
+            <a href="https://www.lighthouseindia.com/" target="_blank">
+                Powered by <span>LightHouse Info System Pvt. Ltd.</span>
+            </a>
+            <a href="#" onclick="openTab(event, 'homeTab')">
+                <i class="fa fa-home" aria-hidden="true" title="Home"></i>
+            </a>
+            <a href="#" onclick="showbtn()">
+                <i class="fa fa-sign-out" aria-hidden="true" title= "Exit"></i>
+            </a>
+        </div>
+        <div class="chat-footer">
+        </div>
+    </div>
+    <button id="chatbotBtn" class="chatbot-button" onclick="toggleChatbot()" title="Virtual Assistant.">💬</button>
+
+    <script>
+        function toggleChatbot() {
+            const chatbot = document.getElementById('chatbot');
+            const chatbotBtn = document.getElementById('chatbotBtn');
+            if (chatbot.style.display === 'none' || chatbot.style.display === '') {
+                chatbot.style.display = 'flex';
+                chatbotBtn.style.display = 'none';
+            } else {
+                chatbot.style.display = 'none';
+                chatbotBtn.style.display = 'block';
+            }
+        }
+
+        function openTab(evt, tabName) {
+            const tabcontent = document.getElementsByClassName("chat-body");
+            for (let i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            document.getElementById(tabName).style.display = "flex";
+            document.getElementById(tabName).style.flexDirection = "column";
+            document.getElementById(tabName).style.overflow = "hidden";
+            const tablinks = document.getElementsByClassName("tab");
+            for (let i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            if (evt) {
+                evt.currentTarget.className += " active";
+            }
+        }
+
+        function sendMessage() {
+            const message = document.getElementById('userInput').value;
+            if (message.trim() === "") return;
+
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'chat-message user-message';
+            userMessageDiv.innerText = message;
+            document.getElementById('chatBody').appendChild(userMessageDiv);
+
+            // Show loader
+            const loaderDiv = document.createElement('div');
+            loaderDiv.className = 'chat-message loader';
+            loaderDiv.innerHTML = '<div class="loader"></div>';
+            document.getElementById('chatBody').appendChild(loaderDiv);
+
+            document.getElementById('userInput').value = '';
+            document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Hide loader
+                    loaderDiv.remove();
+
+                    const botMessageDiv = document.createElement('div');
+                    botMessageDiv.className = 'chat-message bot-message';
+                    botMessageDiv.innerHTML = data.message; // Use innerHTML to render HTML content
+                    document.getElementById('chatBody').appendChild(botMessageDiv);
+
+                    if (data.options) {
+                        const optionsDiv = document.createElement('div');
+                        optionsDiv.className = 'chat-message bot-message options';
+                        data.options.forEach(option => {
+                            const optionButton = document.createElement('button');
+                            optionButton.innerText = option.label;
+                            optionButton.onclick = () => sendMessageWithOption(option.value);
+                            optionsDiv.appendChild(optionButton);
+                        });
+                        document.getElementById('chatBody').appendChild(optionsDiv);
+                    }
+
+                    document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function sendMessageWithOption(option) {
+            if (option === 'contact') {
+                openTab(null, 'contactFormTab');
+                return;
+            }
+
+            const optionMessageDiv = document.createElement('div');
+            // optionMessageDiv.className = 'chat-message user-message';
+            // optionMessageDiv.innerText = option;
+            document.getElementById('chatBody').appendChild(optionMessageDiv);
+
+            // Show loader
+            const loaderDiv = document.createElement('div');
+            loaderDiv.className = 'chat-message loader';
+            loaderDiv.innerHTML = '<div class="loader"></div>';
+            document.getElementById('chatBody').appendChild(loaderDiv);
+
+            fetch('/fixed_response', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: option })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Hide loader
+                    loaderDiv.remove();
+
+                    const botMessageDiv = document.createElement('div');
+                    botMessageDiv.className = 'chat-message bot-message';
+                    botMessageDiv.innerHTML = data.message; // Use innerHTML to render HTML content
+                    document.getElementById('chatBody').appendChild(botMessageDiv);
+
+                    if (data.options) {
+                        const optionsDiv = document.createElement('div');
+                        optionsDiv.className = 'chat-message bot-message options';
+                        data.options.forEach(option => {
+                            const optionButton = document.createElement('button');
+                            optionButton.innerText = option.label;
+                            optionButton.onclick = () => sendMessageWithOption(option.value);
+                            optionsDiv.appendChild(optionButton);
+                        });
+                        document.getElementById('chatBody').appendChild(optionsDiv);
+                    }
+
+                    document.getElementById('chatBody').scrollTop = document.getElementById('chatBody').scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function checkEnterKey(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load fixed options
+            fetch('/fixed_options')
+                .then(response => response.json())
+                .then(data => {
+                    const fixedOptionsDiv = document.getElementById('fixedOptions');
+                    data.options.forEach(option => {
+                        const optionButton = document.createElement('button');
+                        optionButton.innerText = option.label;
+                        optionButton.onclick = () => sendMessageWithOption(option.value);
+                        fixedOptionsDiv.appendChild(optionButton);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading fixed options:', error);
+                });
+        });
+
+        document.getElementById('submitContactFormBtn').addEventListener('click', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const form = document.getElementById('contactForm');
+            if (form.checkValidity()) {
+                const formData = {
+                    name: document.getElementById('name').value,
+                    mobile: document.getElementById('mobile').value,
+                    email: document.getElementById('email').value,
+                    company: document.getElementById('company').value,
+                    city: document.getElementById('city').value,
+                    message: document.getElementById('message').value
+                };
+
+                fetch('/submit-contact-form', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById('chatBody').innerHTML='';
+
+                            const botMessageDiv = document.createElement('div');
+                            botMessageDiv.className = 'chat-message bot-message';
+                            botMessageDiv.innerHTML = data.message; // Display message in chatbot
+                            document.getElementById('chatBody').appendChild(botMessageDiv);
+                            form.reset(); // Clear the form
+                            
+                            openTab(null, 'conversationTab');
+                        } else {
+                            alert(data.message); // Handle error case
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error submitting contact form:', error);
+                    });
+            } else {
+                form.reportValidity(); // Show validation errors
+            }
+        });
+
+        function showbtn() {
+            fetch('/reset-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/';
+                    } else {
+                        console.error('Failed to reset session');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+    <script>
+        // var parentElement = document.getElementById('fixedOptions');
+        // var observer = new MutationObserver(function(mutations) {
+        //     mutations.forEach(function(mutation) {
+        //         mutation.addedNodes.forEach(function(node) {
+        //             if (node.tagName === 'BUTTON') {
+        //                 node.textContent = ''; 
+        //             }
+        //         });
+        //     });
+        // });
+        // observer.observe(parentElement, { childList: true, subtree: true });
+
+        function observeParent(parentElement) {
+            var observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    mutation.addedNodes.forEach(function (node) {
+                        if (node.tagName === 'BUTTON') {
+                            node.textContent = ''; // Remove text from the new button
+                        }
+                    });
+                });
+            });
+
+            observer.observe(parentElement, { childList: true, subtree: true });
+        }
+
+        // Initial observation
+        var parentElement = document.getElementById('fixedOptions');
+        observeParent(parentElement);
+
+        // Example function to change the parent id and reinitialize the observer
+        function changeParentId(newId) {
+            parentElement.id = newId;
+            parentElement = document.getElementById(newId);
+            observeParent(parentElement);
+        }
+
+
+    </script>
+</body>
+
+</html>

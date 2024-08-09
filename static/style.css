@@ -1,0 +1,501 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #c2c2c2; 
+  }
+
+
+.footer_bar {
+    text-align: left;
+    border-top: 1px solid #d3d3d35c;
+    padding: 5px 17px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.newClass .chat-message{
+    display: none;
+}
+.newClass .options{
+    display: block;
+}
+
+.footer_bar a {
+    text-decoration: none;
+    font-size: 12px;
+    color: #898989
+}
+
+.footer_bar i {
+    font-size: 18px;
+    color: #6f6f6f;
+    cursor: pointer;
+}
+
+.footer_bar i:hover, .footer_bar a span:hover {
+    color: #e6000a;
+}
+
+.chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 350px;
+    height: 600px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+}
+
+.chat-header {
+    /* background: linear-gradient(359deg, rgba(125, 193, 217, 1) 0%, rgba(5, 134, 211, 1) 100%); */
+    background: #002650;
+    color: white;
+    padding: 8px 14px;
+    border-top: 1px solid #ccc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header-title h4 {
+    font-size: 17px;
+    margin: 0 0 0 11px;
+}
+
+.header-title h4 span {
+    font-size: 11px;
+    font-weight: 100;
+    letter-spacing: .7px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.chat-body {
+    padding: 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+.chat-body .chat-footer{
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    height: 25px;
+}
+
+.welcome-area {
+    margin: 24px 0 0;
+}
+
+.chat-body h1 {
+    font-size: 20px;
+    color: #515151;
+}
+
+.chat-body img {
+    width: 340px;
+    opacity: .6;
+    margin-top: 26px;
+}
+
+.chat-body p {
+    color: #b7b7b7;
+    margin: 0px;
+}
+
+.chat-footer {
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffffff;
+    color: #888;
+    font-size: 11px;
+}
+
+.chat-footer a {
+    text-decoration: none;
+    color: #888;
+}
+
+.chat-footer a:hover span {
+    color: #e6000a;
+}
+
+.chat-footer input[type="text"] {
+    flex-grow: 1;
+    padding: 9px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px !important;
+}
+
+.chat-footer input[type="text"]:focus-visible {
+    outline: none;
+}
+
+button {
+    padding: 8px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: #002650;
+    color: white;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    margin-bottom: 6px;
+}
+
+button:hover {
+    background-color: #e6000a;
+}
+.close-btn{
+    box-shadow: none;
+    padding: 6px;
+}
+.close-btn:hover{
+    background-color: #1c3e63;
+    border-radius: 04px;
+    padding: 6px;
+    box-shadow: rgb(151 151 151) 0px 1px 5px;
+}
+#sendBtn{
+    background-color: transparent;
+    transition: all .3s;
+    box-shadow: none;
+    color: #002650;
+    font-size: 19px;
+}
+#sendBtn:hover{
+    color: #e6000a;
+}
+
+#startConversationBtn {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #002650;
+    color: white;
+    cursor: pointer;
+    margin-top: 34px;
+}
+
+#startConversationBtn i {
+    font-size: 16px;
+    margin: 0 3px 0;
+}
+
+#startConversationBtn:hover {
+    background-color: #e6000a;
+}
+
+.chat-message {
+    margin: 0 0 11px 0;
+    padding: 10px;
+    border-radius: 6px;
+    max-width: 85%;
+    word-wrap: break-word;
+}
+
+.user-message {
+    background-color: #50a1fb4a;
+    color: #3d3d3d;
+    font-size: 12px;
+    border-radius: 5px;
+    padding: 6px 6px;
+    border: 1px solid #dfe1fd;
+    position: relative;
+    width: max-content;
+    margin-bottom: 8px;
+}
+
+.bot-message {
+    background-color: #e0e0e06e;
+    color: #3d3d3d;
+    font-size: 12px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 3px;
+    padding: 8px 10px;
+    /* display: flex; */
+    flex-direction: column;
+}
+.bot-message span{
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+.options{
+    display: flex;
+   
+}
+#fixedOptions{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: row;
+    padding: 7px 0 0;
+    max-width: 100%;
+    background: transparent;
+    box-shadow: none;
+    margin-bottom: 0;
+}
+#fixedOptions button{
+    border-radius: 50px;
+    position: relative;
+}
+#fixedOptions button:nth-child(1){
+    background-image: url(../static/erp.png);
+    background-size: 26px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 36px;
+    height: 36px;
+}
+
+
+#fixedOptions button:nth-child(2){
+    background-image: url(../static/support.png);
+    background-size: 22px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 36px;
+    height: 36px;
+}
+
+
+#fixedOptions button:nth-child(3){
+    background-image: url(../static/request.png);
+    background-size: 21px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 36px;
+    height: 36px;
+}
+
+
+#fixedOptions button:nth-child(4){
+    background-image: url(../static/contact.png);
+    background-size: 22px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 36px;
+    height: 36px;
+}
+
+#fixedOptions button:nth-child(1)::after{
+    content: "More about LightHouse ERP";
+    position: absolute;
+    bottom: 40px;
+    left: -27px;
+    background-color: #000000db;
+    color: #fff;
+    height: auto;
+    width: max-content;
+    z-index: 999;
+    display: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+#fixedOptions button:nth-child(2)::after{
+    content: "Get Support";
+    position: absolute;
+    bottom: 40px;
+    left: -27px;
+    background-color: #000000db;
+    color: #fff;
+    height: auto;
+    width: max-content;
+    z-index: 999;
+    display: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+#fixedOptions button:nth-child(3)::after{
+    content: "Request a demo";
+    position: absolute;
+    bottom: 40px;
+    left: -27px;
+    background-color: #000000db;
+    color: #fff;
+    height: auto;
+    width: max-content;
+    z-index: 999;
+    display: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+#fixedOptions button:nth-child(4)::after{
+    content: "Contact Us";
+    position: absolute;
+    bottom: 40px;
+    left: -27px;
+    background-color: #000000db;
+    color: #fff;
+    height: auto;
+    width: max-content;
+    z-index: 999;
+    display: none;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+#fixedOptions button:hover::after{
+    display: block;
+    transition: all .4s;
+}
+
+
+#homeTab {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#conversationTab {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#chatBody {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+#userInput, #sendBtn {
+    margin: 0;
+}
+
+.chatbot-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+}
+.required {
+    color: red;
+    font-size: 1.2px;
+}
+
+/* Loader styles */
+.loader {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Contact Form Styles */
+#contactForm {
+    display: flex;
+    flex-direction: column;
+}
+
+#contactForm label {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #4b4b4b;
+}
+
+#contactForm input, #contactForm textarea {
+    padding: 7px 10px;
+    margin-top: 5px;
+    border: 1px solid #d9d9d9;
+    border-radius: 5px;
+    
+}
+
+
+#contactForm input:focus, #contactForm textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none;
+}
+#contactFormTab{
+    flex-direction: column !important;
+}
+
+#contactForm input[type="text"], #contactForm input[type="email"] {
+    font-size: 12px;
+    width: 93%;
+    height: 15px;
+    
+}
+#contactForm input[type="text"]::placeholder,
+#contactForm input[type="email"]::placeholder,
+#contactForm input[type="tel"]::placeholder{
+    font-size: 12px;
+    color: rgb(206, 206, 206);
+}
+
+
+#contactForm textarea {
+    resize: vertical;
+    height: 72px;
+    font-size: 14px;
+    width: 93%;
+}
+
+#submitContactFormBtn {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #002650;
+    color: white;
+    cursor: pointer;
+    margin-top: 20px;
+    align-self: center;
+    width: 100%;
+    box-shadow: none;
+}
+
+#submitContactFormBtn:hover {
+    background-color: #e6000a;
+}
